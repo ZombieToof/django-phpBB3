@@ -19,26 +19,16 @@ from django_phpBB3 import VERSION_STRING
 
 PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-
-try:
-    from creole.setup_utils import get_long_description
-except ImportError:
-    if "register" in sys.argv or "sdist" in sys.argv or "--long-description" in sys.argv:
-        etype, evalue, etb = sys.exc_info()
-        evalue = etype("%s - Please install python-creole >= v0.8 -  e.g.: pip install python-creole" % evalue)
-        raise etype, evalue, etb
-    long_description = None
-else:
-    long_description = get_long_description(PACKAGE_ROOT)
-
+def long_description():
+    readme = open(os.path.join(PACKAGE_ROOT, "README.creole"), "r")
+    long_description = readme.read()
+    readme.close()
+    return long_description
 
 def get_authors():
-    try:
-        f = file(os.path.join(PACKAGE_ROOT, "AUTHORS"), "r")
-        authors = [l.strip(" *\r\n") for l in f if l.strip().startswith("*")]
-        f.close()
-    except Exception, err:
-        authors = "[Error: %s]" % err
+    f = open(os.path.join(PACKAGE_ROOT, "AUTHORS"), "r")
+    authors = [l.strip(" *\r\n") for l in f if l.strip().startswith("*")]
+    f.close()
     return authors
 
 
@@ -47,13 +37,14 @@ setup(
     version=VERSION_STRING,
     description='django database models of phpBB3',
     keywords=["django", "forum", "phpBB3", "phpBB"],
-    long_description=long_description,
+    long_description=long_description(),
     author=get_authors(),
     maintainer="Jens Diemer",
     maintainer_email="django-phpBB3@jensdiemer.de",
     url='https://github.com/jedie/django-phpBB3/',
     download_url='http://pypi.python.org/pypi/django-phpBB3/',
     packages=find_packages(),
+    use_2to3=True,
     include_package_data=True, # include package data under svn source control
     install_requires=[
         "Django>=1.4",
