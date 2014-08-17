@@ -651,7 +651,7 @@ class Post(models.Model):
     """
     Topic posts
     """
-    id = models.AutoField(primary_key=True, db_column="post_id",
+    id = models.PositiveIntegerField(primary_key=True, db_column="post_id",
         # mediumint(8) unsigned
         help_text="primary key"
     )
@@ -795,7 +795,7 @@ class Topic(models.Model):
     """
     Topic in forums
     """
-    id = models.AutoField(primary_key=True, db_column="topic_id",
+    id = models.PositiveIntegerField(primary_key=True, db_column="topic_id",
         # mediumint(8) unsigned
         help_text="Primary key"
     )
